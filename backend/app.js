@@ -7,6 +7,7 @@ const fs = require("fs");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products');
+const { log } = require('console');
 
 var app = express();
 
@@ -16,7 +17,7 @@ MongoClient.connect("mongodb://127.0.0.1:27017", {
     useUnifiedTopology: true
 })
 .then(client => {
-    console.log("bajs");
+    console.log("databas kopplad");
 
     const db = client.db("anton-schyberg");
     app.locals.db = db;
@@ -36,33 +37,66 @@ app.get("/users", function(req, res) {
 
     let newUser = `
     <form action="/usersaved" method="post">
-        <input type="text" name="username">
-        <input type="text" name="email">
-        <input type="text" name="password">
+        <input type="text" name="username">användarnamn
+        <input type="text" name="email">email
+        <input type="password" name="password">lösenord
         <button type="submit">spara</button>
     </form>
     `
     res.send(newUser);
-})
-
+  })
+  
 app.post("/usersaved", function(req, res) {
-    console.log(req.body);
+console.log(req.body);
 
-    let userName = req.body.username;
-    let userEmail = req.body.email;
-    let userPassword = req.body.password;
+let userName = req.body.username;
+let userEmail = req.body.email;
+let userPassword = req.body.password;
 
-    let user = `${userName}, ${userEmail}, ${userPassword}`;
-    console.log(user);
-    let userSaved = "ditt konto har skapats";
+let userData = {
+    username: userName,
+    email: userEmail,
+    password: userPassword
+};
 
-    fs.appendFile("users.txt", `${userName}, ${userEmail}, ${userPassword} '\n'`, function(err){
-        if (err) {
-            console.log(err);
+
+let filepath = path.join(__dirname, "users.json");
+fs.readFile(filepath, "utf8", function(err, data) {
+    if (err) {
+        console.log(err);
+    }
+
+    let users = [];
+
+    try {
+        users = JSON.parse(data);
+    } catch (parseError) {
+        console.log(parseError);
+    }
+
+    users.push(userData);
+
+    let updatedData = JSON.stringify(users, null, 2);
+
+    fs.writeFile(filepath, updatedData, "utf8", function(writeErr) {
+        if (writeErr) {
+            console.log(writeErr);
         }
-    }) ;
 
-    res.send(userSaved);
-})
+        let userSaved = "ditt konto har skapats";
+        res.send(userSaved);
+    });
+});
+
+/*
+
+fs.appendFile("users.json", `${userName}, ${userEmail}, ${userPassword} '\n'`, function(err){
+    if (err) {
+        console.log(err);
+    }
+}) ;
+*/
+
+});
 
 module.exports = app;
