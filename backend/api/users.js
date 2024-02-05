@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
   .then(result => {
     console.log(result);
 
+    // Map through the array and create a new array without the "password" field
     const users = result.map(user => {
       const { password, ...users } = user;
       return users;
@@ -48,11 +49,13 @@ router.post("/add", function(req, res) {
   req.app.locals.db.collection("users").insertOne(req.body)
   .then(result => {
     console.log(result);
+
+    res.send(result);
   })
 })
 
 
-router.get("/", function(req, res) {
+router.get("/add", function(req, res) {
 
   let newUser = `
   <form action="/usersaved" method="post">
@@ -118,6 +121,20 @@ fs.appendFile("users.json", `${userName}, ${userEmail}, ${userPassword} '\n'`, f
 
 });
 
+
+router.post("/login", function(req, res) {
+
+  const {email, password} = req.body;
+
+  req.app.locals.db.collection("users").findOne({email: email, password: password})
+  .then(users => {
+
+    console.log(users);
+    res.send("du är inloggad");
+  })
+
+  
+});
 
 
 /*
