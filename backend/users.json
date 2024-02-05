@@ -8,5 +8,19 @@
     "username": "bajs1234",
     "email": "bajs@email.com",
     "password": "bagqasdfas"
+  },
+  {
+    "username": "bajs1234",
+    "email": "bajs@email.com",
+    "password": "asdagasadsa"
+  },
+  {
+    "username": "bajs1234",
+    "email": "",
+    "password": "asdagasadsa"
+  },
+  {
+    "email": "test@mail.com",
+    "password": "test"
   }
 ]
