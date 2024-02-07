@@ -7,6 +7,7 @@ const fs = require("fs");
 var indexRouter = require('./api/index');
 var usersRouter = require('./api/users');
 var productsRouter = require('./api/products');
+var ordersRouter = require('./api/orders');
 const { log } = require('console');
 
 var app = express();
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/index', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/orders', ordersRouter);
 
 
 
