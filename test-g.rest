@@ -35,8 +35,8 @@ POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "icolisbe3@netlog.com",
-  "password": "zV6'dtBuS?Z9"
+  "email": "ckropp9@example.com",
+  "password": "wH0}Cuh2Fh1|yuO"
 }
 
 ###
@@ -53,7 +53,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/ // ID PÅ PRODUKT
+GET http://localhost:3000/api/products/65c262426c13b7fd5e636058
 
 ###
 
@@ -62,10 +62,10 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 1",
-  "description": "Beskrivning av produkt 1",
-  "price": 100, 
-  "lager": 10
+  "name": "bajs bil",
+  "description": "bajs 142 från 1903",
+  "price": 133700, 
+  "stock": 2
 }
 
 ###
