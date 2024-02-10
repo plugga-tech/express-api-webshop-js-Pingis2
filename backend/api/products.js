@@ -5,11 +5,23 @@ const { ObjectId } = require('mongodb');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   req.app.locals.db.collection("products").find().toArray()
-  .then(cars => {
-    console.log(cars);
+  .then(products => {
 
-    res.json(cars);
-  })
+    ourCars = `
+    <h1>Våra bilar</h1>
+    <ul>
+    `
+
+    products.forEach(products => {
+      ourCars += `<li>${products.name + " | pris: " + products.price + " | antal: " + products.stock}</li>`;
+    });
+
+    ourCars += `
+      </ul>
+    `
+
+    res.send(ourCars);
+  });
   
 });
 
@@ -26,22 +38,14 @@ router.get("/:id", function(req, res) {
 
     res.send(result);
   })
-
-  
-
-  // antalet användare - kan användas för att visa antalet produkter
-  /*
-  req.app.locals.db.collection("users").countDocuments()
-  .then(results => {
-    console.log(results);
-  })
-  */
 });
 
 router.post("/add", function(req, res) {
   req.app.locals.db.collection("products").insertOne(req.body)
   .then(result => {
     console.log(result);
+
+
 
     res.json(result);
   })

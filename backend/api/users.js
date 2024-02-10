@@ -8,16 +8,28 @@ const { ObjectId } = require('mongodb');
 router.get('/', function(req, res, next) {
   req.app.locals.db.collection("users").find().toArray()
   .then(result => {
-    console.log(result);
 
     // Map through the array and create a new array without the "password" field
     const users = result.map(user => {
-      const { password, ...users } = user;
-      return users;
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
     })
 
-    res.json(users);
-  })
+    allUsers = `
+    <h1>alla användare</h1>
+    <ul>
+    `
+
+    users.forEach(users => {
+      allUsers += `<li>${users._id + " | " + users.name + " | " + users.email}`
+    })
+
+    allUsers += `
+      </ul>
+    `
+
+    res.send(allUsers);
+  });
   
 });
 
@@ -50,14 +62,15 @@ router.post("/add", function(req, res) {
     console.log(result);
 
     res.send(result);
-  })
-})
+  });
+});
 
 
 router.get("/add", function(req, res) {
 
   let newUser = `
-  <form action="/usersaved" method="post">
+  <h1>Skapa ett konto</h1>
+  <form action="/api/usersaved" method="post">
       <input type="text" name="username">användarnamn
       <input type="text" name="email">email
       <input type="password" name="password">lösenord
@@ -68,45 +81,54 @@ router.get("/add", function(req, res) {
 });
 
 router.post("/usersaved", function(req, res) {
-console.log(req.body);
+  console.log(req.body);
 
-let userName = req.body.username;
-let userEmail = req.body.email;
-let userPassword = req.body.password;
+  let userName = req.body.username;
+  let userEmail = req.body.email;
+  let userPassword = req.body.password;
 
-let userData = {
-  username: userName,
-  email: userEmail,
-  password: userPassword
-};
+  let userData = {
+    username: userName,
+    email: userEmail,
+    password: userPassword
+  };
 
 
-let filepath = path.join(__dirname, "users.json");
-fs.readFile(filepath, "utf8", function(err, data) {
-  if (err) {
-      console.log(err);
-  }
+  let filepath = path.join(__dirname, "users.json");
+  fs.readFile(filepath, "utf8", function(err, data) {
+    if (err) {
+        console.log(err);
+    }
 
-  let users = [];
+    let users = [];
 
-  try {
-      users = JSON.parse(data);
-  } catch (parseError) {
-      console.log(parseError);
-  }
+    try {
+        users = JSON.parse(data);
+    } catch (parseError) {
+        console.log(parseError);
+    }
 
-  users.push(userData);
+    users.push(userData);
 
-  let updatedData = JSON.stringify(users, null, 2);
+    let updatedData = JSON.stringify(users, null, 2);
 
-  fs.writeFile(filepath, updatedData, "utf8", function(writeErr) {
-      if (writeErr) {
-          console.log(writeErr);
-      }
+    fs.writeFile(filepath, updatedData, "utf8", function(writeErr) {
+        if (writeErr) {
+            console.log(writeErr);
+        }
 
-      let userSaved = "ditt konto har skapats";
-      res.send(userSaved);
-  });
+        let userSaved = "ditt konto har skapats";
+        res.send(userSaved);
+    });
+});
+
+router.post('/usersaved', function(req, res) {
+
+  savedUser = `
+  <h1>ditt konto har skapats</h1>
+  `
+
+  res.send(savedUser);
 });
 
 /*

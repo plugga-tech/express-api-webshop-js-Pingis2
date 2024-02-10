@@ -18,10 +18,22 @@ router.post('/add', function(req, res, next) {
 
 router.get("/all", function(req, res) {
   req.app.locals.db.collection("orders").find().toArray()
-  .then(result => {
-    console.log(result);
+  .then(orders => {
 
-    res.json(result);
+    allOrders = `
+    <h1>alla beställningar</h1>
+    <ul>
+    `
+
+    orders.forEach(orders => {
+      allOrders += `<li>${orders._id + " | " + orders.user + " | " + orders.products}`
+    })
+
+    allOrders += `
+      </ul>
+    `
+
+    res.send(allOrders);
   })
 })
 
