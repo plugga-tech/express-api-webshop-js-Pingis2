@@ -20,20 +20,7 @@ router.get("/all", function(req, res) {
   req.app.locals.db.collection("orders").find().toArray()
   .then(orders => {
 
-    allOrders = `
-    <h1>alla beställningar</h1>
-    <ul>
-    `
-
-    orders.forEach(orders => {
-      allOrders += `<li>${orders._id + " | " + orders.user + " | " + orders.products}`
-    })
-
-    allOrders += `
-      </ul>
-    `
-
-    res.send(allOrders);
+    res.send(orders);
   })
 })
 

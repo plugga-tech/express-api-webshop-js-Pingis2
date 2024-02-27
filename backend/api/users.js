@@ -15,20 +15,7 @@ router.get('/', function(req, res, next) {
       return userWithoutPassword;
     })
 
-    allUsers = `
-    <h1>alla användare</h1>
-    <ul>
-    `
-
-    users.forEach(users => {
-      allUsers += `<li>${users._id + " | " + users.name + " | " + users.email}`
-    })
-
-    allUsers += `
-      </ul>
-    `
-
-    res.send(allUsers);
+    res.send(users);
   });
   
 });
@@ -36,23 +23,22 @@ router.get('/', function(req, res, next) {
 router.post("/", function(req, res) {
 
   const id = req.body.id;
-
   const objectId = new ObjectId(id);
 
   req.app.locals.db.collection("users").findOne({ _id: objectId })
-  .then(result => {
-    console.log(result);
+    .then(result => {
+      console.log(result);
 
-    res.send(result);
-  })
+      res.json(result);
+    });
 
-  // antalet användare - kan användas för att visa antalet produkter
-  /*
-  req.app.locals.db.collection("users").countDocuments()
-  .then(results => {
-    console.log(results);
-  })
-  */
+    // antalet användare - kan användas för att visa antalet produkter
+    /*
+    req.app.locals.db.collection("users").countDocuments()
+    .then(results => {
+      console.log(results);
+    })
+    */
 });
 
 
@@ -70,7 +56,7 @@ router.get("/add", function(req, res) {
 
   let newUser = `
   <h1>Skapa ett konto</h1>
-  <form action="/api/usersaved" method="post">
+  <form action="/api/users/usersaved" method="post">
       <input type="text" name="username">användarnamn
       <input type="text" name="email">email
       <input type="password" name="password">lösenord
@@ -78,7 +64,9 @@ router.get("/add", function(req, res) {
   </form>
   `
   res.send(newUser);
-});
+})
+
+/*
 
 router.post("/usersaved", function(req, res) {
   console.log(req.body);
@@ -131,17 +119,17 @@ router.post('/usersaved', function(req, res) {
   res.send(savedUser);
 });
 
-/*
+
 
 fs.appendFile("users.json", `${userName}, ${userEmail}, ${userPassword} '\n'`, function(err){
   if (err) {
       console.log(err);
   }
 }) ;
-*/
+
 
 });
-
+*/
 
 router.post("/login", function(req, res) {
 
@@ -151,7 +139,7 @@ router.post("/login", function(req, res) {
   .then(users => {
 
     console.log(users);
-    res.send("du är inloggad");
+    res.send("du är inloggad",);
   })
 
   
